@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 
 const Title = styled.div`
@@ -9,6 +9,7 @@ const Title = styled.div`
 
   margin-bottom: 11px;
 
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -16,6 +17,7 @@ const Title = styled.div`
   background: #343a3f;
 
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.24);
+  overflow: hidden;
 `;
 
 const BackButton = styled.div`
@@ -46,12 +48,62 @@ const TitleText = styled.div`
   color: #ffffff;
 `;
 
-function MobTitle({ id }) {
+const Full = styled.div`
+  width: 320px;
+  height: 48px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  position: absolute;
+
+  ${(props) =>
+    props.isDetail
+      ? css`
+          opacity: 1;
+          transform: translateX(0px);
+        `
+      : css`
+          opacity: 0;
+          transform: translateX(320px);
+        `}
+
+  transition: opacity 700ms, transform 700ms ease-out;
+`;
+
+const Logo = styled.div`
+  width: 106px;
+  height: 48px;
+
+  background: #26ddcd;
+
+  border-radius: 4px 0px 0px 4px;
+  position: absolute;
+
+  ${(props) =>
+    props.isDetail
+      ? css`
+          opacity: 0;
+          transform: translateX(-320px);
+        `
+      : css`
+          opacity: 1;
+          transform: translateX(0px);
+        `}
+
+  transition: opacity 700ms, transform 700ms ease-out;
+`;
+
+function MobTitle({ isDetail }) {
   return (
     <Link to={`/`}>
       <Title>
-        <BackButton>&lt;</BackButton>
-        <TitleText>집단 감염 예상치</TitleText>
+        <Full isDetail={isDetail}>
+          <BackButton>&lt;</BackButton>
+          <TitleText>집단 감염 예상치</TitleText>
+        </Full>
+        <Logo isDetail={isDetail} />
       </Title>
     </Link>
   );

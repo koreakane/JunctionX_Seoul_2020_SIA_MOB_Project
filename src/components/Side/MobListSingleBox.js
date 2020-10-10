@@ -46,14 +46,14 @@ function MobListSingleBox({ isDetail = false, val }) {
         fontWeight="bold"
         lineHeight="25px"
       >
-        광화문 광장
+        {val.name}
       </MobListSingleBoxText>
       <MobListSingleBoxText
         color="#A2A9B0"
         marginBottom="8px"
         lineHeight="18px"
       >
-        2020년 10월 7일
+        {val.date}
       </MobListSingleBoxText>
       <MobListSingleBoxText
         right
@@ -70,7 +70,7 @@ function MobListSingleBox({ isDetail = false, val }) {
         fontWeight="bold"
         lineHeight="80px"
       >
-        24명
+        {val.pred_infected}명
       </MobListSingleBoxText>
     </MobListSingleBoxDiv>
   );

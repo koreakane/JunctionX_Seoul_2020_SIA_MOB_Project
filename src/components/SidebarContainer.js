@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
+import { Transition, TransitionGroup } from "react-transition-group";
 
 import MobTitle from "./Side/MobTitle";
 import MobListContainer from "./Side/MobListContainer";
@@ -10,6 +11,8 @@ const Sidebar = styled.div`
   position: absolute;
   top: 0px;
   left: 32px;
+
+  z-index : 100;
 
   width: 320px;
   height: 100%;
@@ -22,23 +25,42 @@ const Sidebar = styled.div`
   align-items: center;
 `;
 
-const MobList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-function SidebarContainer({ id }) {
+function SidebarContainer({ MobList, isDetail, id, option, setOption }) {
   return (
     <Sidebar>
-      <MobTitle id={id} />
-      <Switch>
-        <Route exact path="/">
-          <MobListContainer MobList={MobList} />
-        </Route>
-        <Route path="/:id">
-          <MobDetail />
-        </Route>
-        <Route path="*">
-          <div>nomatch</div>
-        </Route>
-      </Switch>
+      <MobTitle isDetail={isDetail} />
+
+      <TransitionGroup component={null}>
+        <Transition appear={true} timeout={{ enter: 750, exit: 150 }}>
+          <Switch>
+            <Route exact path="/">
+              <MobListContainer MobList={MobList} />
+            </Route>
+
+            <Route
+              path="/:id"
+              render={() =>
+                MobList ? (
+                  <MobDetail
+                    MobList={MobList}
+                    option={option}
+                    setOption={setOption}
+                  />
+                ) : (
+                  <Redirect
+                    to={{
+                      pathname: "/",
+                    }}
+                  />
+                )
+              }
+            />
+            <Route path="*">
+              <div>nomatch</div>
+            </Route>
+          </Switch>
+        </Transition>
+      </TransitionGroup>
     </Sidebar>
   );
 }

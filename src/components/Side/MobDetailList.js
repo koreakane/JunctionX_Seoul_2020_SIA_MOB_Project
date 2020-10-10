@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import Switch from "@material-ui/core/Switch";
+import Slider from "@material-ui/core/Slider";
 
 const MobDetailInfoDiv = styled.div`
   width: 100%;
@@ -32,6 +34,7 @@ const InfoSetDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   margin-top: 16px;
 `;
 
@@ -63,6 +66,8 @@ const MobDetailHistoryDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  margin-bottom: 20px;
 `;
 
 const ThanksText = styled.a`
@@ -80,32 +85,90 @@ const ThanksText = styled.a`
   margin-top: 16px;
 `;
 
-const InfoSet = ({ title, value, unit }) => {
+const SliderDiv = styled.div`
+  min-width: 200px;
+`;
+
+const InfoSet = ({ title, value, unit, children }) => {
   return (
     <InfoSetDiv>
       <TitleText color=" #697077">{title}</TitleText>
       <InfoSetSubDiv>
-        <TitleText>
-          {value}
-          {unit}
-        </TitleText>
+        {children ? (
+          children
+        ) : (
+          <TitleText>
+            {value}
+            {unit}
+          </TitleText>
+        )}
       </InfoSetSubDiv>
     </InfoSetDiv>
   );
 };
 
-function MobDetailList() {
+const OptionBarSwitch = ({ name, singleOption, handleChange }) => {
+  return (
+    <Switch
+      checked={singleOption}
+      onChange={handleChange}
+      name={name}
+      inputProps={{ "aria-label": "primary checkbox" }}
+    />
+  );
+};
+
+const OptionBarSlider = ({ name, historySlider, handleChange }) => {
+  function valuetext(value) {
+    return `${value}년`;
+  }
+
+  function valueLabelFormat(value) {
+    return historySlider.findIndex((mark) => mark.value === value) + 1;
+  }
+
+  return (
+    <SliderDiv>
+      <Slider
+        defaultValue={historySlider[historySlider.length - 1].value}
+        valueLabelFormat={valueLabelFormat}
+        getAriaValueText={valuetext}
+        aria-labelledby="discrete-slider-restrict"
+        step={null}
+        valueLabelDisplay="off"
+        marks={historySlider}
+        onChange={handleChange}
+        min={1998}
+        max={2020}
+      />
+    </SliderDiv>
+  );
+};
+
+function MobDetailList({ val, option, setOption }) {
+  const { isImage, isSvgOn, historySlider, selectedHistory } = option;
+
+  const handleChange = (event) => {
+    setOption({ ...option, [event.target.name]: event.target.checked });
+  };
+
+  const handleChangeSlider = (event, val) => {
+    const valIndex = historySlider.findIndex((mark) => mark.value === val);
+    if (valIndex !== selectedHistory)
+      setOption({ ...option, selectedHistory: valIndex });
+  };
+
   return (
     <React.Fragment>
       <MobDetailInfoDiv>
         <TitleText fontWeight="bold">인원 정보</TitleText>
-        <InfoSet title="전체 인원" value={117} unit="명" />
-        <InfoSet title="초기 감염 인원" value={3} unit="명" />
+        <InfoSet title="전체 인원" value={val.susceptible} unit="명" />
+        <InfoSet title="초기 감염 인원" value={val.infected} unit="명" />
         <Separator />
         <TitleText fontWeight="bold">모임 정보</TitleText>
-        <InfoSet title="행동 면적" value={62} unit="m" />
-        <InfoSet title="지속 시간" value={120} unit="분" />
-        <InfoSet title="외기 순환도" value={100} unit="%" />
+        <InfoSet title="행동 면적" value={val.site_area} unit="㎡" />
+        <InfoSet title="지속 시간" value={val.susceptible} unit="분" />
+        <InfoSet title="외기 순환도" value={val.vent_rate} unit="%" />
         <ThanksText
           target="_blank"
           href="https://docs.google.com/spreadsheets/d/16K1OQkLD4BjgBdO8ePj6ytf-RpPMlJ6aXFg3PrIQBbQ/edit#gid=519189277"
@@ -113,6 +176,29 @@ function MobDetailList() {
           Thanks to Jose L. Jimenez
         </ThanksText>
       </MobDetailInfoDiv>
+      <MobDetailHistoryDiv>
+        <TitleText fontWeight="bold">설정</TitleText>
+        <InfoSet title="지도/위성사진">
+          <OptionBarSwitch
+            name="isImage"
+            singleOption={isImage}
+            handleChange={handleChange}
+          />
+        </InfoSet>
+        <InfoSet title="SVG">
+          <OptionBarSwitch
+            name="isSvgOn"
+            singleOption={isSvgOn}
+            handleChange={handleChange}
+          />
+        </InfoSet>
+        <InfoSet title="년도">
+          <OptionBarSlider
+            historySlider={historySlider}
+            handleChange={handleChangeSlider}
+          />
+        </InfoSet>
+      </MobDetailHistoryDiv>
       <MobDetailHistoryDiv>
         <TitleText fontWeight="bold">기록</TitleText>
       </MobDetailHistoryDiv>

@@ -8,7 +8,8 @@ const MobListDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-height: 90%;
+  max-height: calc(100vh - 92px);
+  padding-bottom: 37px;
 
   overflow: scroll;
   -ms-overflow-style: none; /* IE and Edge */
@@ -23,9 +24,9 @@ function MobListContainer({ MobList }) {
     <MobListDiv>
       {MobList.map((val, index) => (
         <Link
-          key={val}
+          key={val.id}
           style={{ width: "100%", marginBottom: "20px" }}
-          to={`/${val}`}
+          to={`/${val.id}`}
         >
           <MobListSingleBox val={val} />
         </Link>
