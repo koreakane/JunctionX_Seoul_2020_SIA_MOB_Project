@@ -42,6 +42,10 @@ function Main() {
 
   let location = useLocation();
 
+  // useEffect(() => {
+  //   Json.parse(window.localStorage.getItem("MobList"));
+  // }, []);
+
   useEffect(() => {
     // console.log(location);
     const pathname = location.pathname;

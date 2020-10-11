@@ -228,7 +228,7 @@ function MobDetailList({ val, option, setOption, isDetail, MobImage }) {
         <Separator />
         <TitleText fontWeight="bold">Mass Info</TitleText>
         <InfoSet title="Action Area" value={val.site_area} unit="㎡" />
-        <InfoSet title="Duration" value={val.susceptible} unit="min" />
+        <InfoSet title="Duration" value={val.duration} unit="min" />
         <InfoSet
           title="External Air Circulation"
           value={val.vent_rate}
