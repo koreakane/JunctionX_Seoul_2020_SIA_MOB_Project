@@ -28,7 +28,7 @@ const MobDetailContainer = styled.div`
   }
 `;
 
-function MobDetail({ MobList, option, setOption, isDetail }) {
+function MobDetail({ MobList, option, setOption, isDetail, MobImage }) {
   let { id } = useParams();
 
   useEffect(() => {
@@ -38,14 +38,13 @@ function MobDetail({ MobList, option, setOption, isDetail }) {
   return (
     <MobDetailContainer>
       {/* <MobListSingleBox val={MobList[Number(id) - 1]} isDetail={isDetail} /> */}
-      {option.historySlider[0] ? (
-        <MobDetailList
-          isDetail={isDetail}
-          option={option}
-          setOption={setOption}
-          val={MobList[Number(id) - 1]}
-        />
-      ) : null}
+      <MobDetailList
+        isDetail={isDetail}
+        option={option}
+        setOption={setOption}
+        val={MobList[Number(id) - 1]}
+        MobImage={MobImage}
+      />
     </MobDetailContainer>
   );
 }

@@ -36,6 +36,7 @@ function SidebarContainer({
   currentID,
   option,
   setOption,
+  MobImage,
 }) {
   return (
     <Sidebar>
@@ -57,6 +58,7 @@ function SidebarContainer({
                   MobList={MobList}
                   option={option}
                   setOption={setOption}
+                  MobImage={MobImage}
                 />
               ) : (
                 <Redirect

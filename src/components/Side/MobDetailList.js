@@ -136,10 +136,6 @@ const ThanksText = styled.a`
   margin-top: 16px;
 `;
 
-const SliderDiv = styled.div`
-  min-width: 200px;
-`;
-
 const InfoSet = ({ title, value, unit, children }) => {
   return (
     <InfoSetDiv>
@@ -169,57 +165,75 @@ const OptionBarSwitch = ({ name, singleOption, handleChange }) => {
   );
 };
 
-const OptionBarSlider = ({ name, historySlider, handleChange }) => {
-  function valuetext(value) {
-    return `${value}년`;
-  }
+const HistoryButton = styled.button`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  background-color: transparent;
 
-  function valueLabelFormat(value) {
-    return historySlider.findIndex((mark) => mark.value === value) + 1;
-  }
+  cursor: pointer;
+`;
 
+const HistoryDate = styled.h4`
+  font-family: Spoqa Han Sans;
+  font-style: normal;
+  font-size: 17px;
+  line-height: 25px;
+  letter-spacing: -0.04em;
+
+  font-weight: normal;
+  color: ${(props) => (props.isSelected ? "#343A3F" : "#878D96")};
+`;
+
+const OptionBarHistory = ({
+  date,
+  index,
+  isSelected,
+  handleChangeHistory,
+}) => {
   return (
-    <SliderDiv>
-      <Slider
-        defaultValue={historySlider[historySlider.length - 1].value}
-        valueLabelFormat={valueLabelFormat}
-        getAriaValueText={valuetext}
-        aria-labelledby="discrete-slider-restrict"
-        step={null}
-        valueLabelDisplay="off"
-        marks={historySlider}
-        onChange={handleChange}
-        min={1998}
-        max={2020}
-      />
-    </SliderDiv>
+    <HistoryButton
+      isSelected={isSelected}
+      onClick={() => handleChangeHistory(index)}
+    >
+      <HistoryDate isSelected={isSelected}>{date}</HistoryDate>
+    </HistoryButton>
   );
 };
 
-function MobDetailList({ val, option, setOption, isDetail }) {
-  const { isImage, isSvgOn, historySlider, selectedHistory } = option;
+function MobDetailList({ val, option, setOption, isDetail, MobImage }) {
+  const { isImage, isSvgOn, selectedHistory } = option;
 
   const handleChange = (event) => {
     setOption({ ...option, [event.target.name]: event.target.checked });
   };
 
-  const handleChangeSlider = (event, val) => {
-    const valIndex = historySlider.findIndex((mark) => mark.value === val);
-    if (valIndex !== selectedHistory)
-      setOption({ ...option, selectedHistory: valIndex });
+  const handleChangeHistory = (val) => {
+    setOption({ ...option, selectedHistory: val });
   };
 
   return (
     <MobDetailDiv disappear={!isDetail}>
       <MobDetailInfoDiv>
-        <TitleText fontWeight="bold">인원 정보</TitleText>
-        <InfoSet title="전체 인원" value={val.susceptible} unit="명" />
-        <InfoSet title="초기 감염 인원" value={val.infected} unit="명" />
+        <TitleText fontWeight="bold">Crowd Info</TitleText>
+        <InfoSet title="Total" value={val.susceptible} unit="people" />
+        <InfoSet
+          title="Early Infection"
+          value={val.infected}
+          unit="people"
+        />
         <Separator />
-        <TitleText fontWeight="bold">모임 정보</TitleText>
-        <InfoSet title="행동 면적" value={val.site_area} unit="㎡" />
-        <InfoSet title="지속 시간" value={val.susceptible} unit="분" />
-        <InfoSet title="외기 순환도" value={val.vent_rate} unit="%" />
+        <TitleText fontWeight="bold">Mass Info</TitleText>
+        <InfoSet title="Action Area" value={val.site_area} unit="㎡" />
+        <InfoSet title="Duration" value={val.susceptible} unit="min" />
+        <InfoSet
+          title="External Air Circulation"
+          value={val.vent_rate}
+          unit="%"
+        />
         <ThanksText
           target="_blank"
           href="https://docs.google.com/spreadsheets/d/16K1OQkLD4BjgBdO8ePj6ytf-RpPMlJ6aXFg3PrIQBbQ/edit#gid=519189277"
@@ -228,9 +242,9 @@ function MobDetailList({ val, option, setOption, isDetail }) {
         </ThanksText>
       </MobDetailInfoDiv>
       <MobDetailHistoryDiv>
-        <TitleText fontWeight="bold">설정</TitleText>
+        <TitleText fontWeight="bold">Option</TitleText>
 
-        <InfoSet title="지도/위성사진">
+        <InfoSet title="Map/Satelite">
           <OptionBarSwitch
             name="isImage"
             singleOption={isImage}
@@ -244,16 +258,21 @@ function MobDetailList({ val, option, setOption, isDetail }) {
             handleChange={handleChange}
           />
         </InfoSet>
-        <InfoSet title="년도">
-          <OptionBarSlider
-            historySlider={historySlider}
-            handleChange={handleChangeSlider}
-          />
-        </InfoSet>
       </MobDetailHistoryDiv>
-      <MobDetailHistoryDiv>
-        <TitleText fontWeight="bold">기록</TitleText>
-      </MobDetailHistoryDiv>
+      {MobImage ? (
+        <MobDetailHistoryDiv>
+          <TitleText fontWeight="bold">History</TitleText>
+          {MobImage.images.map((val, index) => (
+            <OptionBarHistory
+              key={index}
+              index={index}
+              date={val.date}
+              handleChangeHistory={handleChangeHistory}
+              isSelected={index === selectedHistory}
+            />
+          ))}
+        </MobDetailHistoryDiv>
+      ) : null}
     </MobDetailDiv>
   );
 }

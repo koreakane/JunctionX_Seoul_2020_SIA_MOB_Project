@@ -2,6 +2,8 @@ import React from "react";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 
+import LogoFile from "../../assets/mob_logo-02.svg";
+
 const Title = styled.div`
   width: 320px;
   height: 48px;
@@ -43,7 +45,6 @@ const TitleText = styled.div`
   font-size: 17px;
   line-height: 25px;
   letter-spacing: -0.04em;
-  text-transform: uppercase;
 
   color: #ffffff;
 `;
@@ -73,13 +74,14 @@ const Full = styled.div`
 `;
 
 const Logo = styled.div`
-  width: 106px;
+  width: 320px;
   height: 48px;
 
-  background: #26ddcd;
+  background: #343a3f;
 
   border-radius: 4px 0px 0px 4px;
   position: absolute;
+  padding-right: 16px;
 
   ${(props) =>
     props.isDetail
@@ -93,6 +95,39 @@ const Logo = styled.div`
         `}
 
   transition: opacity 700ms, transform 700ms ease-out;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const LogoBox = styled.div`
+  width: 106px;
+  height: 100%;
+
+  background: #26ddcd;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const LogoObject = styled.object`
+  width: 80%;
+`;
+
+const LogoText = styled.div`
+  font-family: Spoqa Han Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 21px;
+
+  text-align: right;
+  letter-spacing: -0.04em;
+
+  color: #a2a9b0;
 `;
 
 function MobTitle({ isDetail }) {
@@ -101,9 +136,14 @@ function MobTitle({ isDetail }) {
       <Title>
         <Full isDetail={isDetail}>
           <BackButton>&lt;</BackButton>
-          <TitleText>집단 감염 예상치</TitleText>
+          <TitleText>Cluster Analysis</TitleText>
         </Full>
-        <Logo isDetail={isDetail} />
+        <Logo isDetail={isDetail}>
+          <LogoBox>
+            <LogoObject type="image/svg+xml" data={LogoFile} />
+          </LogoBox>
+          <LogoText>Tracking Cluster Infection</LogoText>
+        </Logo>
       </Title>
     </Link>
   );

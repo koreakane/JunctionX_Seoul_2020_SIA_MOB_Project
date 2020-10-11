@@ -114,7 +114,7 @@ function MobListSingleBox({ isExist, isDetail = false, val, onClick }) {
         fontWeight="bold"
         lineHeight="25px"
       >
-        예상 감염 인원
+        Estimated Infections
       </MobListSingleBoxText>
       <MobListSingleBoxText
         right
@@ -122,7 +122,7 @@ function MobListSingleBox({ isExist, isDetail = false, val, onClick }) {
         fontWeight="bold"
         lineHeight="80px"
       >
-        {val.pred_infected}명
+        {val.pred_infected}
       </MobListSingleBoxText>
     </MobListSingleBoxDiv>
   );

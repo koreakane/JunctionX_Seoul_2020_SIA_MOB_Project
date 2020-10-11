@@ -37,7 +37,6 @@ function Main() {
   const [option, setOption] = useState({
     isImage: false,
     isSvgOn: false,
-    historySlider: [],
     selectedHistory: null,
   });
 
@@ -84,7 +83,6 @@ function Main() {
       setOption({
         isImage: false,
         isSvgOn: false,
-        historySlider: [],
         selectedHistory: null,
       });
     }
@@ -106,12 +104,6 @@ function Main() {
     if (MobImage) {
       setOption({
         ...option,
-        historySlider: MobImage.images
-          .map((val, index) => ({
-            value: Number(val.date.substring(0, 4)),
-            label: val.date.substring(0, 4),
-          }))
-          .reverse(),
         selectedHistory: 0,
       });
     }
@@ -123,9 +115,8 @@ function Main() {
   }, [option]);
 
   //
-  if (mobListLoading) return <AppContainer>로딩중..</AppContainer>;
-  if (mobListError)
-    return <AppContainer>에러가 발생했습니다</AppContainer>;
+  if (mobListLoading) return <AppContainer>loading..</AppContainer>;
+  if (mobListError) return <AppContainer>Error has occured.</AppContainer>;
   if (!MobList) return null;
   return (
     <AppContainer>
@@ -142,6 +133,7 @@ function Main() {
         MobList={MobList}
         isDetail={isDetail}
         currentID={currentID}
+        MobImage={MobImage}
       />
       <ModalContainer />
     </AppContainer>
