@@ -1,7 +1,58 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import Switch from "@material-ui/core/Switch";
 import Slider from "@material-ui/core/Slider";
+
+const slideDown = keyframes`
+  from {
+    transform: translateY(-90vh);
+    opacity : 0%;
+    display:none;
+  }
+  30%{
+    transform: translateY(-90vh);
+    opacity : 0%;
+    display:none;
+  }
+  to {
+    transform: translateY(0px);
+    opacity : 100%;
+    display:flex;
+  }
+`;
+
+const slideUp = keyframes`
+  from {
+    transform: translateY(0px);
+    opacity : 100%;
+    display:flex;
+  }
+  to {
+    transform: translateY(-90vh);
+    opacity : 0%;
+    display:none;
+  }
+`;
+
+const MobDetailDiv = styled.div`
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 11;
+
+  animation-duration: 1.2s;
+  animation-timing-function: ease-in;
+  animation-name: ${slideDown};
+  animation-fill-mode: forwards;
+
+  ${(props) =>
+    props.disappear &&
+    css`
+      animation-name: ${slideUp};
+    `}
+`;
 
 const MobDetailInfoDiv = styled.div`
   width: 100%;
@@ -145,7 +196,7 @@ const OptionBarSlider = ({ name, historySlider, handleChange }) => {
   );
 };
 
-function MobDetailList({ val, option, setOption }) {
+function MobDetailList({ val, option, setOption, isDetail }) {
   const { isImage, isSvgOn, historySlider, selectedHistory } = option;
 
   const handleChange = (event) => {
@@ -159,7 +210,7 @@ function MobDetailList({ val, option, setOption }) {
   };
 
   return (
-    <React.Fragment>
+    <MobDetailDiv disappear={!isDetail}>
       <MobDetailInfoDiv>
         <TitleText fontWeight="bold">인원 정보</TitleText>
         <InfoSet title="전체 인원" value={val.susceptible} unit="명" />
@@ -178,6 +229,7 @@ function MobDetailList({ val, option, setOption }) {
       </MobDetailInfoDiv>
       <MobDetailHistoryDiv>
         <TitleText fontWeight="bold">설정</TitleText>
+
         <InfoSet title="지도/위성사진">
           <OptionBarSwitch
             name="isImage"
@@ -202,7 +254,7 @@ function MobDetailList({ val, option, setOption }) {
       <MobDetailHistoryDiv>
         <TitleText fontWeight="bold">기록</TitleText>
       </MobDetailHistoryDiv>
-    </React.Fragment>
+    </MobDetailDiv>
   );
 }
 

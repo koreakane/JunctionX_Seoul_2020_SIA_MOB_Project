@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+
 import MobListSingleBox from "./MobListSingleBox";
 
 const MobListDiv = styled.div`
@@ -8,8 +9,13 @@ const MobListDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-height: calc(100vh - 92px);
-  padding-bottom: 37px;
+  height: calc(100vh - 92px);
+  padding-bottom: 0px;
+  z-index: 10;
+
+  position: absolute;
+  top: 60px;
+
 
   overflow: scroll;
   -ms-overflow-style: none; /* IE and Edge */
@@ -19,17 +25,32 @@ const MobListDiv = styled.div`
   }
 `;
 
-function MobListContainer({ MobList }) {
+function MobListContainer({ MobList, isDetail, currentID }) {
+  let history = useHistory();
+  const [fixedMobList, setFixedMobList] = useState(MobList);
+
+  function handleClick(selectedID) {
+    history.push(`/${selectedID}`);
+  }
+
+  useEffect(() => {
+    if (isDetail) {
+      setTimeout(() => setFixedMobList([MobList[currentID - 1]]), 700);
+    } else {
+      setTimeout(() => setFixedMobList(MobList), 700);
+    }
+  }, [isDetail]);
+
   return (
-    <MobListDiv>
-      {MobList.map((val, index) => (
-        <Link
+    <MobListDiv isDetail={isDetail}>
+      {fixedMobList.map((val, index) => (
+        <MobListSingleBox
           key={val.id}
-          style={{ width: "100%", marginBottom: "20px" }}
-          to={`/${val.id}`}
-        >
-          <MobListSingleBox val={val} />
-        </Link>
+          isDetail={isDetail}
+          isExist={val.id == currentID}
+          val={val}
+          onClick={() => handleClick(val.id)}
+        />
       ))}
     </MobListDiv>
   );

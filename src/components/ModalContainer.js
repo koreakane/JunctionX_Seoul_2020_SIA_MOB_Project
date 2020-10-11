@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Modal from "react-modal";
+import { makeStyles } from "@material-ui/core/styles";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
 
-const customStyles = {
-  content: {
-    zIndex: 90,
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
+const useStyles = makeStyles((theme) => ({
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
-};
+}));
 
 const ModalContainerDiv = styled.div`
   z-index: 90;
@@ -43,36 +42,45 @@ const ModalButton = styled.button`
   color: #ffffff;
 `;
 
+const ModalDiv = styled.div`
+  zindex: 90;
+  width: 60vw;
+  height: 60vh;
+
+  background: #f2f4f8;
+  backdrop-filter: blur(32px);
+`;
+
 function ModalContainer() {
-  var subtitle;
-  const [modalIsOpen, setIsOpen] = useState(false);
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
 
-  function openModal() {
-    setIsOpen(true);
-  }
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    subtitle.style.color = "black";
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <ModalContainerDiv>
-      <ModalButton onClick={openModal}>info</ModalButton>
+      <ModalButton onClick={handleOpen}>info</ModalButton>
       <Modal
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        className={classes.modal}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
       >
-        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Hello</h2>
-        <div>I am a modal</div>
-        <button onClick={closeModal}>close</button>
+        <Fade in={open}>
+          <ModalDiv></ModalDiv>
+        </Fade>
       </Modal>
     </ModalContainerDiv>
   );

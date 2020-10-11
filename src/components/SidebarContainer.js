@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { Transition, TransitionGroup } from "react-transition-group";
 
 import MobTitle from "./Side/MobTitle";
 import MobListContainer from "./Side/MobListContainer";
@@ -12,7 +11,7 @@ const Sidebar = styled.div`
   top: 0px;
   left: 32px;
 
-  z-index : 100;
+  z-index: 100;
 
   width: 320px;
   height: 100%;
@@ -25,42 +24,54 @@ const Sidebar = styled.div`
   align-items: center;
 `;
 
-function SidebarContainer({ MobList, isDetail, id, option, setOption }) {
+const SidebarInsideDiv = styled.div`
+  position: relative;
+  height: 100%;
+  width: 100%;
+`;
+
+function SidebarContainer({
+  MobList,
+  isDetail,
+  currentID,
+  option,
+  setOption,
+}) {
   return (
     <Sidebar>
-      <MobTitle isDetail={isDetail} />
-
-      <TransitionGroup component={null}>
-        <Transition appear={true} timeout={{ enter: 750, exit: 150 }}>
-          <Switch>
-            <Route exact path="/">
-              <MobListContainer MobList={MobList} />
-            </Route>
-
-            <Route
-              path="/:id"
-              render={() =>
-                MobList ? (
-                  <MobDetail
-                    MobList={MobList}
-                    option={option}
-                    setOption={setOption}
-                  />
-                ) : (
-                  <Redirect
-                    to={{
-                      pathname: "/",
-                    }}
-                  />
-                )
-              }
-            />
-            <Route path="*">
-              <div>nomatch</div>
-            </Route>
-          </Switch>
-        </Transition>
-      </TransitionGroup>
+      <SidebarInsideDiv>
+        <MobTitle isDetail={isDetail} />
+        <MobListContainer
+          MobList={MobList}
+          isDetail={isDetail}
+          currentID={currentID}
+        />
+        <Switch>
+          <Route exact path="/"></Route>
+          <Route
+            path="/:id"
+            render={() =>
+              MobList ? (
+                <MobDetail
+                  isDetail={isDetail}
+                  MobList={MobList}
+                  option={option}
+                  setOption={setOption}
+                />
+              ) : (
+                <Redirect
+                  to={{
+                    pathname: "/",
+                  }}
+                />
+              )
+            }
+          />
+          <Route path="*">
+            <div>nomatch</div>
+          </Route>
+        </Switch>
+      </SidebarInsideDiv>
     </Sidebar>
   );
 }

@@ -25,8 +25,7 @@ const MapContainerDiv = styled.div`
   top: 0;
   left: 0;
   position: absolute;
-  transition:  opacity 700ms;
-
+  transition: opacity 700ms;
 
   ${(props) =>
     props.isImage
@@ -55,7 +54,7 @@ function MapContainer({ id, MobList, isImage }) {
         lng: Number(MobList[id - 1].longitude),
       });
 
-      setZoom(13);
+      setZoom(18);
     }
   }, [id]);
 

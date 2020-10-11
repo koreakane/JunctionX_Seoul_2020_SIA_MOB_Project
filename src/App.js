@@ -80,6 +80,13 @@ function Main() {
     console.log("currentID :" + currentID);
     if (currentID) {
       mobImageRefetch(currentID);
+    } else {
+      setOption({
+        isImage: false,
+        isSvgOn: false,
+        historySlider: [],
+        selectedHistory: null,
+      });
     }
   }, [currentID]);
 
@@ -134,7 +141,7 @@ function Main() {
         setOption={setOption}
         MobList={MobList}
         isDetail={isDetail}
-        id={currentID}
+        currentID={currentID}
       />
       <ModalContainer />
     </AppContainer>

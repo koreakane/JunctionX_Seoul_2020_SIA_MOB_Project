@@ -6,12 +6,14 @@ import MobDetailList from "./MobDetailList";
 
 const MobDetailContainer = styled.div`
   width: 100%;
-  border-radius: 4px;
+  border-radius: 0px 0px 4px 4px;
 
   background-color: transparent;
-  margin-bottom: 20px;
 
-  max-height: calc(100vh - 92px);
+  position: absolute;
+  top: 248px;
+
+  max-height: calc(100vh - 280px);
   padding-bottom: 37px;
 
   display: flex;
@@ -26,7 +28,7 @@ const MobDetailContainer = styled.div`
   }
 `;
 
-function MobDetail({ MobList, option, setOption }) {
+function MobDetail({ MobList, option, setOption, isDetail }) {
   let { id } = useParams();
 
   useEffect(() => {
@@ -35,9 +37,10 @@ function MobDetail({ MobList, option, setOption }) {
 
   return (
     <MobDetailContainer>
-      <MobListSingleBox val={MobList[Number(id) - 1]} isDetail={true} />
+      {/* <MobListSingleBox val={MobList[Number(id) - 1]} isDetail={isDetail} /> */}
       {option.historySlider[0] ? (
         <MobDetailList
+          isDetail={isDetail}
           option={option}
           setOption={setOption}
           val={MobList[Number(id) - 1]}
