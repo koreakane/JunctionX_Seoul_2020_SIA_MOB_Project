@@ -1,3 +1,9 @@
+Junction X Seoul 2020 Hackathon SIA 트랙 2등 수상작 입니다.
+
+
+
+아래의 내용들은 React를 처음 사용하실 때 봐주세요
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
